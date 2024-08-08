@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Photo Gallery</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        .card-img-top {
+            height: 200px;
+            object-fit: cover;
+        }
+        footer {
+            background-color: #f8f9fa;
+            padding: 20px 0;
+        }
+        .filter-section {
+            margin-bottom: 1.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-4">
+        <h1 class="mb-4 text-center">Photo Gallery</h1>
+
+        <form id="filterForm" method="get" action="{% url 'photo_list' %}">
+            <div class="form-row mb-4">
+                <div class="col-md-3 mb-3 filter-section">
+                    <h5>Category</h5>
+                    <select name="category" class="form-control">
+                        <option value="">All Categories</option>
+                        {% for category in categories %}
+                            <option value="{{ category.id }}" {% if category.id == selected_category %}selected{% endif %}>{{ category.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="col-md-3 mb-3 filter-section">
+                    <h5>Author</h5>
+                    <select name="author" class="form-control">
+                        <option value="">All Authors</option>
+                        {% for author in authors %}
+                            <option value="{{ author.id }}" {% if author.id == selected_author %}selected{% endif %}>{{ author.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="col-md-3 mb-3 filter-section">
+                    <h5>Sort By</h5>
+                    <select name="sort" class="form-control">
+                        <option value="last" {% if sort_option == 'last' %}selected{% endif %}>Last Photos</option>
+                        <option value="new" {% if sort_option == 'new' %}selected{% endif %}>New Photos</option>
+                    </select>
+                </div>
+
+                <div class="col-md-3 mb-3">
+                    <button type="submit" class="btn btn-success mt-4">Apply Filters</button>
+                </div>
+            </div>
+        </form>
+
+
+        <div class="row mt-4">
+            {% for photo in photos %}
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                        <img src="{{ photo.image.url }}" class="card-img-top" alt="Photo">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ photo.author.name }}</h5>
+                            <p class="card-text">{{ photo.date_add }}</p>
+                            <p class="card-text">
+                                <i class="fas fa-eye"></i> {{ photo.views }}
+                            </p>
+                            <a href="{% url 'photo_detail' photo.id %}" class="btn btn-info">View Details</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+        <nav aria-label="Page navigation">
+            <ul class="pagination justify-content-center">
+                <li class="page-item"><a class="page-link" href="#"><<<<<<<</a></li>
+                <li class="page-item"><a class="page-link" href="#">>>>>>>></a></li>
+            </ul>
+        </nav>
+    </div>
+
+    <footer class="text-center">
+        <div class="container">
+            <p>&copy; 2024 Photo Gallery. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
